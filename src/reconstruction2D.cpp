@@ -12,12 +12,28 @@ PointMassList makePoints(Rcpp::NumericMatrix Pts, Rcpp::NumericVector masses) {
   return points;
 }
 
-Rcpp::List runOTR(Rcpp::NumericMatrix Pts, Rcpp::NumericVector masses) {
+// [[Rcpp::export]]
+Rcpp::List runOTR(
+  Rcpp::NumericMatrix Pts, Rcpp::NumericVector masses, 
+  unsigned int steps, std::size_t np, double tolerance
+) {
   PointMassList points = makePoints(Pts, masses);
   PointMap pointMap;
   MassMap  massMap;
   Otr otr(points, pointMap, massMap);
-  otr.run(100); // 100 steps
+  if(steps == 0 && np == 0) {
+    otr.run_under_wasserstein_tolerance(tolerance);    
+  } else {
+    bool success;
+    if(steps == 0) {
+      success = otr.run_until(np);
+    } else {
+      success = otr.run(steps);
+    }
+    if(!success) {
+      Rcpp::stop("failure");
+    }
+  }
   std::vector<Point> isolatedVertices;
   std::vector<Segment> edges;
   otr.list_output(
@@ -41,8 +57,9 @@ Rcpp::List runOTR(Rcpp::NumericMatrix Pts, Rcpp::NumericVector masses) {
       Rcpp::NumericVector::create(vx1.x(), vx1.y(), vx2.x(), vx2.y());
     Edges(Rcpp::_, i) = edge;
   }
+  Rcpp::rownames(Edges) = Rcpp::CharacterVector::create("x0", "y0", "x1", "y1");
 
-  return Rcpp::List::create(Rcpp::Named("vertices") = Vertices,
-                            Rcpp::Named("segments") = Edges);
+  return Rcpp::List::create(Rcpp::Named("vertices") = Rcpp::transpose(Vertices),
+                            Rcpp::Named("segments") = Rcpp::transpose(Edges));
 
 }
