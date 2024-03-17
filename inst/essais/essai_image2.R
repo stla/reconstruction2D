@@ -1,31 +1,25 @@
 library(imager)
 library(dplyr)
 
-cuts <- seq(0, 600, len = 70)
-
-img <- load.image("picture.png") %>%
+img <- load.image("Frankenstein.jpg") %>%
   #grayscale() %>%
-  threshold("auto")
+  threshold("75%")
 
 dat <- img %>%
   as.cimg() %>%
   as.data.frame()  %>%
-  mutate(mass = 1-value) %>%
+  mutate(mass = 1 - value) %>%
+  sample_n(8000, weight = mass) %>%
   select(x, y, mass) %>%
-  mutate(
-    ix = cuts[findInterval(x, cuts, all.inside = TRUE)],
-    iy = cuts[findInterval(y, cuts, all.inside = TRUE)]
-  ) %>%
-  filter(mass != 0) %>%
-  group_by(ix, iy) %>%
-  summarize(w = n())
+  filter(mass != 0)
 
-pts <- as.matrix(dat[, c("ix", "iy")])
-masses <- dat$w
+
+pts <- as.matrix(dat[, c("x", "y")])
+masses <- dat$mass
 
 
 steps <- 0L
-np <- 0L
+np <- 30L
 tolerance <- 11
 otr <- reconstruction2D:::runOTR(t(pts), masses, steps, np, tolerance)
 segs <- otr$segments

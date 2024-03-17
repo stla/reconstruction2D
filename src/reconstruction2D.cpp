@@ -1,5 +1,14 @@
 #include "reconstruction2D.h"
 
+// -------------------------------------------------------------------------- //
+// -------------------------------------------------------------------------- //
+void Message(std::string msg) {
+  SEXP rmsg = Rcpp::wrap(msg);
+  Rcpp::message(rmsg);
+}
+
+// -------------------------------------------------------------------------- //
+// -------------------------------------------------------------------------- //
 PointMassList makePoints(Rcpp::NumericMatrix Pts, Rcpp::NumericVector masses) {
   int n = Pts.ncol();
   PointMassList points;
@@ -12,6 +21,8 @@ PointMassList makePoints(Rcpp::NumericMatrix Pts, Rcpp::NumericVector masses) {
   return points;
 }
 
+// -------------------------------------------------------------------------- //
+// -------------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List runOTR(
   Rcpp::NumericMatrix Pts, Rcpp::NumericVector masses, 
@@ -30,8 +41,8 @@ Rcpp::List runOTR(
     } else {
       success = otr.run(steps);
     }
-    if(false) {
-      Rcpp::stop("failure");
+    if(!success) {
+      Message("Premature end.");
     }
   }
   std::vector<Point> isolatedVertices;
@@ -57,9 +68,9 @@ Rcpp::List runOTR(
       Rcpp::NumericVector::create(vx1.x(), vx1.y(), vx2.x(), vx2.y());
     Edges(Rcpp::_, i) = edge;
   }
-  Rcpp::rownames(Edges) = Rcpp::CharacterVector::create("x0", "y0", "x1", "y1");
-
+  Rcpp::rownames(Vertices) = Rcpp::CharacterVector::create("x", "y");
+  Rcpp::rownames(Edges) = 
+    Rcpp::CharacterVector::create("x0", "y0", "x1", "y1");
   return Rcpp::List::create(Rcpp::Named("vertices") = Rcpp::transpose(Vertices),
                             Rcpp::Named("segments") = Rcpp::transpose(Edges));
-
 }
