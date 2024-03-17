@@ -30,16 +30,27 @@ tolerance <- 0.5
 otr <- reconstruction2D:::runOTR(t(pts), masses, steps, np, tolerance)
 segs <- otr$segments
 
+# reconstruct the pentagram
+pts <- noisyPentagram()
+shape <- otr(pts, np = 10)
+segs <- shape[["segments"]]
+# plot
 opar <- par(mar = c(0, 0, 0, 0))
 plot(
-  NULL, asp = 1,
-  xlim = c(-0.55, 0.55), ylim = c(-0.55, 0.55),
-  xlab = NA, ylab = NA, axes = FALSE
+  pts, type = "p", pch = ".", asp = 1, cex = 4,
+  xlab = NA, ylab = NA, axes = FALSE, col = "blue"
 )
-points(pts, pch = ".", cex = 4, col = "blue")
 segments(
   segs[, "x0"], segs[, "y0"], segs[, "x1"], segs[, "y1"],
   lwd = 3, col = "black"
+)
+par(opar)
+
+
+opar <- par(mar = c(0, 0, 0, 0))
+plot(
+  noisyPentagram(), type = "p", pch = ".", asp = 1, cex = 4,
+  xlab = NA, ylab = NA, axes = FALSE
 )
 par(opar)
 

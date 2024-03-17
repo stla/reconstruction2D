@@ -1,3 +1,20 @@
+#' Noisy pentagram
+#' @description Generates a noisy pentagram.
+#'
+#' @param sd standard deviation of the noise
+#' @param n number of points per edge
+#'
+#' @return A matrix with two columns, one point per row.
+#' @export
+#' @importFrom stats rnorm
+#'
+#' @examples
+#' opar <- par(mar = c(0, 0, 0, 0))
+#' plot(
+#'   noisyPentagram(), type = "p", pch = ".", asp = 1, cex = 4,
+#'   xlab = NA, ylab = NA, axes = FALSE
+#' )
+#' par(opar)
 noisyPentagram <- function(sd = 0.01, n = 20L) {
   rho <- sqrt((5 - sqrt(5))/10)
   vs1 <- t(vapply(0L:4L, function(i) {
