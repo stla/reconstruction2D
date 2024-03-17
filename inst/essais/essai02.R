@@ -30,9 +30,16 @@ tolerance <- 0.5
 otr <- reconstruction2D:::runOTR(t(pts), masses, steps, np, tolerance)
 segs <- otr$segments
 
-plot(NULL, xlim = c(-0.55, 0.55), ylim = c(-0.55, 0.55), asp = 1)
-points(pts, pch = ".", cex = 3, col = "blue")
+opar <- par(mar = c(0, 0, 0, 0))
+plot(
+  NULL, asp = 1,
+  xlim = c(-0.55, 0.55), ylim = c(-0.55, 0.55),
+  xlab = NA, ylab = NA, axes = FALSE
+)
+points(pts, pch = ".", cex = 4, col = "blue")
 segments(
   segs[, "x0"], segs[, "y0"], segs[, "x1"], segs[, "y1"],
-  lwd = 2, col = "black"
+  lwd = 3, col = "black"
 )
+par(opar)
+
