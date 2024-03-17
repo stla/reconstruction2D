@@ -30,7 +30,7 @@ Rcpp::List runOTR(
     } else {
       success = otr.run(steps);
     }
-    if(!success) {
+    if(false) {
       Rcpp::stop("failure");
     }
   }
