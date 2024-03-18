@@ -12,11 +12,14 @@ otr(points, masses = NULL, steps = NA, np = NA, tolerance = NA)
 \item{masses}{numeric vector of point masses; if \code{NULL}, all masses are
 set to \code{1}}
 
-\item{steps}{number of steps}
+\item{steps}{number of edge collapse operators to be performed; if given
+(i.e. not \code{NA}), then \code{np} and \code{tolerance} must be \code{NA}}
 
-\item{np}{number of vertices to reach}
+\item{np}{number of vertices to reach in the output; if given (i.e. not
+\code{NA}), then \code{steps} and \code{tolerance} must be \code{NA}}
 
-\item{tolerance}{Wasserstein tolerance}
+\item{tolerance}{tolerance on the Wasserstein distance; if given
+(i.e. not \code{NA}), then \code{steps} and \code{np} must be \code{NA}}
 }
 \value{
 A list containing two matrices: \code{vertices}, the isolated
@@ -24,6 +27,12 @@ A list containing two matrices: \code{vertices}, the isolated
 }
 \description{
 Reconstruction of a 2D shape from a set of points.
+}
+\details{
+See \href{https://doc.cgal.org/latest/Optimal_transportation_reconstruction_2/index.html}{Optimal Transportation Curve Reconstruction}.
+}
+\note{
+Only one of \code{steps}, \code{np} and \code{tolerance} must be given.
 }
 \examples{
 # reconstruct the pentagram
