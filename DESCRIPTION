@@ -1,9 +1,12 @@
 Package: reconstruction2D
-Title: What the Package Does (One Line, Title Case)
+Title: Reconstruction of 2D Shapes
 Version: 0.0.0.9000
 Authors@R: 
     person("Stéphane", "Laurent", , "laurent_step@outlook.fr", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: Given a set of 2D points, possibly hampered by noise and
+    outliers, the main function of this package returns a set of segments
+    and isolated points that approximate the input. The algorithm is
+    performed by the 'C++' library 'CGAL' (<https://www.cgal.org/>).
 License: GPL-3
 URL: https://github.com/stla/reconstruction2D
 BugReports: https://github.com/stla/reconstruction2D/issues
