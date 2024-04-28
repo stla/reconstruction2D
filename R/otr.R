@@ -36,10 +36,10 @@
 #' )
 #' par(opar)
 otr <- function(points, masses = NULL, steps = NA, np = NA, tolerance = NA) {
-  stopifnot(ncol(points) == 2)
+  stopifnot(is.matrix(points), ncol(points) == 2)
   storage.mode(points) <- "double"
   if(anyNA(points)) {
-    stop("Missing points coordinates are not allowed.")
+    stop("Found missing coordinates in the `points` matrix.")
   }
   if(is.null(masses)) {
     masses <- rep(1, nrow(points))
@@ -47,7 +47,7 @@ otr <- function(points, masses = NULL, steps = NA, np = NA, tolerance = NA) {
     stopifnot(length(masses) == nrow(points))
     storage.mode(masses) <- "double"
     if(anyNA(masses)) {
-      stop("Missing masses are not allowed.")
+      stop("Found missing values in the `masses` vector.")
     }
   }
   if(sum(c(isNothing(steps), isNothing(np), isNothing(tolerance))) != 2L) {
